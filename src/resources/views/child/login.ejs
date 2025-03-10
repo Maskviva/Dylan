@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible"/>
+
+    <link href="../style.css" id="my-style-sheet" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <link href="../favicon.ico" rel="shortcut icon">
+    <title>狄思可(Dylan)</title>
+
+    <style>
+        .login {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 700px;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: all 0.3s ease-in-out;
+        }
+
+        @media screen and (max-width: 932px) {
+            .login-container {
+                width: 80%;
+                min-width: 340px;
+            }
+        }
+
+        .login-container h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            flex: 0.35;
+            color: #555;
+            font-size: 14px;
+            margin-right: 10px;
+            text-align: left;
+        }
+
+        .form-group input {
+            flex: 3;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        @media screen and (max-width: 932px) {
+            .form-group input {
+                flex: 1;
+            }
+        }
+
+        .form-group input:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+        }
+
+        .form-actions {
+            display: flex;
+        }
+
+        .form-actions-link {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0;
+            margin: 0;
+            color: #4561fd;
+            flex: 0.8;
+        }
+
+        .form-actions-link p {
+            color: #4561fd;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        .form-actions-link p a {
+            text-decoration: none;
+            color: #4561fd;
+        }
+
+        .form-actions-link p a:hover {
+            color: #9c2ae8;
+            text-decoration: underline;
+        }
+
+        .form-actions .header-button {
+            margin-left: auto;
+            background-color: #459efd;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .form-actions .header-button:hover {
+            background-color: #2a7ae8;
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <div class="header-box">
+        <button aria-label="Toggle Menu" class="header-button" onclick="toggleMenu()" type="button"><i
+                class="fas fa-bars"></i></button>
+        <h2>你好，欢迎来到 Dylan </h2>
+    </div>
+    <div class="user-box">
+
+    </div>
+</header>
+
+<main id="main">
+    <nav class="main-nav" id="main-nav">
+        <ul class="main-nav-list">
+            <li class="main-nav-item" id="main-nav-title-box">
+                <a id="main-nav-title">Dylan</a>
+            </li>
+            <li class="main-nav-item">
+                <a class="main-nav-link" href="/" id="home">首页</a>
+            </li>
+            <li class="main-nav-item" id="parent-item">
+                <a class="main-nav-link" id="introduction">介绍<i class="fas fa-angle-down" id="arrow"></i></a>
+                <ul class="submenu">
+                    <li><a href="#">关于我们</a></li>
+                </ul>
+            </li>
+            <li class="main-nav-item">
+                <a class="main-nav-link" href="/feedback" id="feedback">反馈</a>
+            </li>
+            <hr class="main-nav-hr">
+            <li class="main-nav-item">
+                <a class="main-nav-link" href="/mine" id="mine" style="display: none;">我的</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="content">
+        <section class="section">
+            <div class="login">
+                <div class="login-container">
+                    <h1>登录</h1>
+                    <div class="form-group">
+                        <label for="username">用户名:</label>
+                        <input id="username" name="username" placeholder="请输入用户名" required type="text">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">密码:</label>
+                        <input id="password" name="password" placeholder="请输入密码" required type="password">
+                    </div>
+                    <p id="captcha-error" style="margin: 0 0 0 auto;display: none; padding: 0;"></p>
+
+                    <div class="form-actions">
+                        <div class="form-actions-link">
+                            <p>没有账号? <a href="/register">注册一个!</a></p>
+                            <p><a href="/forget">忘记密码?</a></p>
+                        </div>
+                        <input class="header-button" id="register-button" type="submit" value="登录">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+<script src="../script/navbar.js"></script>
+
+<script>
+    const button = document.getElementById('register-button');
+    const userName = document.getElementById('username');
+    const password = document.getElementById('password');
+    const captchaError = document.getElementById('captcha-error');
+
+    button.addEventListener('click', () => {
+        fetch('/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username: userName.value, password: password.value })
+        }).then(res => {
+            if (res.ok) {
+                return res.json()
+            }
+        }).then(data => {
+            if (data.success) {
+                console.log(data)
+                captchaError.style.display = 'block';
+                captchaError.style.color = 'green';
+                captchaError.innerHTML = '登录成功! 即将跳转至主页!';
+                setTimeout(() => {
+                    window.location.href = '/'
+                }, 1000);
+            } else {
+                captchaError.style.display = 'block';
+                captchaError.style.color = 'red';
+                captchaError.innerHTML = `${data.message}`;
+            }
+        })
+
+    })
+</script>
+</body>
+
+</html>

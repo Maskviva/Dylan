@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible"/>
+
+    <link href="../../style.css" id="my-style-sheet" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <link href="../../favicon.ico" rel="shortcut icon">
+    <title>QuestiAI</title>
+
+    <style>
+        :root {
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .card-box {
+            position: relative;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            padding: 16px;
+            margin: 10px;
+            border-radius: 8px;
+            background-color: white;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .card {
+            width: 300px;
+            height: 110px;
+            cursor: pointer;
+            background: white;
+            padding: 18px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: end;
+            justify-content: center;
+            text-decoration: none;
+            color: black;
+            position: relative;
+            box-shadow: 0 4px 12px var(--shadow-color);
+            transition: all 0.2s ease-out;
+        }
+
+        .card:hover {
+            font-size: 34px;
+            transform: translateY(-3px);
+        }
+
+        .card:active {
+            transform: translateY(1px);
+        }
+
+        .card h2 {
+            font-size: 28px;
+        }
+
+        .card-onload {
+            animation: onload 0.5s ease-in-out;
+        }
+
+        @keyframes onload {
+            0% {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <div class="header-box">
+        <button aria-label="Toggle Menu" class="header-button" onclick="toggleMenu()" type="button"><i
+                    class="fas fa-bars"></i></button>
+        <h2>你好，欢迎来到QuestiAI</h2>
+    </div>
+    <div class="user-box" style="z-index: 999;">
+        <% if (userExist) { %>
+            <div class="btn-box" id="user-box">
+                <img alt="用户头像" width="22px" height="22px" class="user-portrait" src="<%= userPortrait %>"
+                     style="border-radius: 4px;">
+                <a href="#" class="user-name"><%= userName %></a>
+            </div>
+            <div id="user-info">
+                <div class="user-info-box-1">
+                    <a href="#"></a>
+                </div>
+                <div class="user-info-box-2">
+                    <div class="user-info-box-2-child1">
+                        <a class="user-info-box-2-child1-img user-portrait" style="background-image: url('<%= userPortrait %>')" href="#">
+                            <p>编辑头像</p>
+                        </a>
+                        <p class="user-name"><%= userName %></p>
+                    </div>
+                    <div class="user-info-box-2-child2">
+                        <a href="/setting" class="user-info-box-btn" id="user-setting">设置</a>
+                        <a href="#" class="user-info-box-btn">退出登录</a>
+                    </div>
+                </div>
+                <div class="user-info-box-3">
+                </div>
+            </div>
+        <% } else { %>
+            <div class="sign-box" id="sign-box">
+                <a href="/login" id="login">登录</a>
+                <a href="/register" id="register">注册</a>
+            </div>
+        <% } %>
+        <button aria-label="Reminder" class="header-button" onclick="" style="width: 44px; height: 44px"
+                type="button"><a href="#" id="bell"></a>
+        </button>
+    </div>
+</header>
+
+<main id="main">
+    <nav class="main-nav" id="main-nav">
+        <ul class="main-nav-list">
+            <li class="main-nav-item" id="main-nav-title-box">
+                <a id="main-nav-title">QuestiAI</a>
+            </li>
+            <li class="main-nav-item">
+                <a class="main-nav-link" href="/" id="home">首页</a>
+            </li>
+            <li class="main-nav-item" id="parent-item">
+                <a class="main-nav-link" id="introduction">介绍<i class="fas fa-angle-down" id="arrow"></i></a>
+                <ul class="submenu">
+                    <li><a href="#">关于我们</a></li>
+                </ul>
+            </li>
+            <li class="main-nav-item">
+                <a class="main-nav-link" href="/feedback" id="feedback">反馈</a>
+            </li>
+            <% if (userExist) { %>
+                <hr class="main-nav-hr">
+                <li class="main-nav-item">
+                    <a class="main-nav-link" href="/mine" id="mine">我的</a>
+                </li>
+                <li class="main-nav-item">
+                    <a class="main-nav-link" href="/setting" id="setting">设置</a>
+                </li>
+            <% } else { %>
+
+            <% } %>
+        </ul>
+    </nav>
+
+    <div class="content">
+        <section class="section">
+            <div class="card-box">
+                <a href="/learn/chinese/PoetryDictation" class="card">
+                    <h2>古诗默写</h2>
+                </a>
+                <div class="card">
+                    <h2>Learn Chinese</h2>
+                </div>
+                <div class="card">
+                    <h2>Learn Chinese</h2>
+                </div>
+                <div class="card">
+                    <h2>Learn Chinese</h2>
+                </div>
+                <div class="card">
+                    <h2>Learn Chinese</h2>
+                </div>
+                <div class="card">
+                    <h2>Learn Chinese</h2>
+                </div>
+                <div class="card">
+                    <h2>Learn Chinese</h2>
+                </div>
+                <div class="card">
+                    <h2>Learn Chinese</h2>
+                </div>
+                <div class="card">
+                    <h2>Learn Chinese</h2>
+                </div>
+                <div class="card">
+                    <h2>Learn Chinese</h2>
+                </div>
+                <div class="card">
+                    <h2>Learn Chinese</h2>
+                </div>
+                <div class="card">
+                    <h2>Learn Chinese</h2>
+                </div>
+                <div class="card">
+                    <h2>Learn Chinese</h2>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+<script src="../../script/navbar.js"></script>
+<script src="../../script/user.js"></script>
+
+<script>
+</script>
+</body>
+
+</html>

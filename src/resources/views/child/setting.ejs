@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible"/>
+
+    <link href="../style.css" id="my-style-sheet" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <link href="../favicon.ico" rel="shortcut icon">
+    <title>狄思可(Dylan)</title>
+
+    <style>
+        .main {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+            padding: 10px;
+            border: 2px solid #e4f0ff;
+            border-radius: 8px;
+            width: 700px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .main-container-box {
+            display: grid;
+            grid-template-columns: 0.5fr 1.5fr;
+            grid-template-rows: 1fr;
+            background-color: white;
+            border-radius: 8px;
+            border: 2px solid #e4f0ff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            box-sizing: border-box;
+            transition: all 0.3s ease-in-out;
+        }
+
+        @media screen and (max-width: 965px) {
+            .main-container {
+                width: 80%;
+                min-width: 340px;
+            }
+        }
+
+        .container-group-title {
+            min-width: 84.2px;
+            background-color: #e4f0ff;
+            border-radius: 8px 0 0 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-right: black solid 1px;
+        }
+
+        .container-group-container {
+            margin-left: 10px;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        @media screen and (max-width: 932px) {
+            .container-group-container {
+                flex: 1;
+            }
+        }
+
+        .submit-btn {
+            width: 100%;
+            height: 33px;
+            background-color: #459efd;
+            color: white;
+            border: none;
+            padding: 7px 0 0 0;
+            margin-top: 10px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #2a7ae8;
+        }
+
+        .submit-btn:active {
+            transform: translateY(3px);
+        }
+
+        .container-group-container input,
+        .container-group-container select {
+            margin: 12px 10px 10px 0;
+            width: 90%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .container-group-container input[type="text"]:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+        }
+
+        .container-group-container select {
+            width: 98%;
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <div class="header-box">
+        <button aria-label="Toggle Menu" class="header-button" onclick="toggleMenu()" type="button"><i
+                    class="fas fa-bars"></i></button>
+        <h2>你好，欢迎来到 Dylan </h2>
+    </div>
+    <div class="user-box" style="z-index: 999;">
+        <% if (userExist) { %>
+            <div class="btn-box" id="user-box">
+                <img alt="用户头像" width="22px" height="22px" class="user-portrait" src="<%= userPortrait %>"
+                     style="border-radius: 4px;">
+                <a href="#" class="user-name"><%= userName %></a>
+            </div>
+            <div id="user-info">
+                <div class="user-info-box-1">
+                    <a href="#"></a>
+                </div>
+                <div class="user-info-box-2">
+                    <div class="user-info-box-2-child1">
+                        <a class="user-info-box-2-child1-img user-portrait"
+                           style="background-image: url('<%= userPortrait %>')" href="#">
+                            <p>编辑头像</p>
+                        </a>
+                        <p class="user-name"><%= userName %></p>
+                    </div>
+                    <div class="user-info-box-2-child2">
+                        <a href="/setting" class="user-info-box-btn" id="user-setting">设置</a>
+                        <a id="logout" href="#" class="user-info-box-btn">退出登录</a>
+                    </div>
+                </div>
+                <div class="user-info-box-3">
+                </div>
+            </div>
+        <% } else { %>
+            <div class="sign-box" id="sign-box">
+                <a href="/login" id="login">登录</a>
+                <a href="/register" id="register">注册</a>
+            </div>
+        <% } %>
+        <button aria-label="Reminder" class="header-button" onclick="" style="width: 44px; height: 44px"
+                type="button"><a href="#" id="bell"></a>
+        </button>
+    </div>
+</header>
+
+<main id="main">
+    <nav class="main-nav" id="main-nav">
+        <ul class="main-nav-list">
+            <li class="main-nav-item" id="main-nav-title-box">
+                <a id="main-nav-title">Dylan</a>
+            </li>
+            <li class="main-nav-item">
+                <a class="main-nav-link" href="/" id="home">首页</a>
+            </li>
+            <li class="main-nav-item" id="parent-item">
+                <a class="main-nav-link" id="introduction">介绍<i class="fas fa-angle-down" id="arrow"></i></a>
+                <ul class="submenu">
+                    <li><a href="#">关于我们</a></li>
+                </ul>
+            </li>
+            <li class="main-nav-item">
+                <a class="main-nav-link" href="/feedback" id="feedback">反馈</a>
+            </li>
+            <% if (userExist) { %>
+                <hr class="main-nav-hr">
+                <li class="main-nav-item">
+                    <a class="main-nav-link" href="/mine" id="mine">我的</a>
+                </li>
+                <li class="main-nav-item">
+                    <a class="main-nav-link" href="#" id="setting">设置</a>
+                </li>
+            <% } else { %>
+
+            <% } %>
+        </ul>
+    </nav>
+
+    <div class="content">
+        <section class="section">
+            <div class="main">
+                <h1 style="margin: 0; padding: 0;">设置</h1>
+                <div class="main-container">
+                    <p>账户信息:</p>
+                    <div class="main-container-box">
+                        <div class="container-group-title">
+                            <p>用户名:</p>
+                            <p>邮箱:</p>
+                            <p>头像:</p>
+                            <p>年龄:</p>
+                            <p>出生日期:</p>
+                        </div>
+                        <div class="container-group-container">
+                            <p><%= userName %></p>
+                            <p><%= userEmail %></p>
+                            <img alt="用户头像" width="50px" height="50px" src="<%= userPortrait %>">
+                            <p><%= userAge %></p>
+                            <p><%= userBirthday %></p>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <p style="margin-right: auto">账户信息设置:</p>
+                        <a style="text-decoration: none; color: #00B4D8;" href="/forget">修改密码请点我</a>
+                    </div>
+                    <div class="main-container-box">
+                        <div class="container-group-title">
+                            <label style="margin: 19px 0 19px 0" for="userName">用户名:</label>
+                            <label style="margin: 19px 0 19px 0" for="userPortrait">头像:</label>
+                            <label style="margin: 19px 0 19px 0" for="userAge">年龄:</label>
+                            <label style="margin: 19px 0 19px 0" for="userBirthday">出生日期:</label>
+                        </div>
+                        <div class="container-group-container">
+                            <input id="userName" type="text"
+                                   autocomplete="off">
+                            <input id="userPortrait" type="file">
+                            <input id="userAge" type="text">
+                            <input id="userBirthday" type="date">
+                        </div>
+                    </div>
+                    <a id="userInfoSubmit" class="submit-btn" href="#">提交</a>
+                    <p>学科信息设置:</p>
+                    <div class="main-container-box">
+                        <div class="container-group-title">
+                            <label style="margin: 16px 0 17px 0" for="userGrade">年级:</label>
+                            <label style="margin: 16px 0 17px 0" for="userVolume">学期:</label>
+                            <label style="margin: 16px 0 17px 0" for="chineseTextbooks">语文教材:</label>
+                            <label style="margin: 16px 0 17px 0" for="mathematicsTextbooks">数学教材:</label>
+                            <label style="margin: 16px 0 17px 0" for="englishTextbooks">英语教材:</label>
+                            <label style="margin: 16px 0 17px 0" for="physicsTextbooks">物理教材:</label>
+                            <label style="margin: 16px 0 17px 0" for="chemistryTextbooks">化学教材:</label>
+                            <label style="margin: 16px 0 17px 0" for="biologyTextbooks">生物教材:</label>
+                            <label style="margin: 16px 0 17px 0" for="historyTextbooks">历史教材:</label>
+                            <label style="margin: 16px 0 17px 0" for="geographyTextbooks">地理教材:</label>
+                            <label style="margin: 16px 0 17px 0"
+                                   for="morality_and_rule_of_lawTextbooks">道法教材:</label>
+                        </div>
+                        <div class="container-group-container">
+                            <select id="userGrade">
+                                <optgroup label="小学">
+                                    <option value="一年级">一年级</option>
+                                    <option value="二年级">二年级</option>
+                                    <option value="三年级">三年级</option>
+                                    <option value="四年级">四年级</option>
+                                    <option value="五年级">五年级</option>
+                                    <option value="六年级">六年级</option>
+                                </optgroup>
+                                <optgroup label="初中">
+                                    <option value="初一">初一</option>
+                                    <option value="初二">初二</option>
+                                    <option value="初三">初三</option>
+                                </optgroup>
+                                <optgroup label="高中">
+                                    <option value="高一">高一</option>
+                                    <option value="高二">高二</option>
+                                    <option value="高三">高三</option>
+                                </optgroup>
+                            </select>
+                            <select id="userVolume">
+                                <option value="上册">上学期</option>
+                                <option value="下册">下学期</option>
+                            </select>
+                            <select id="chineseTextbooks">
+                                <option value="统编版">统编版</option>
+                                <option value="人教版">人教版</option>
+                                <option value="浙教版">浙教版</option>
+                                <option value="北师大版">北师大版</option>
+                                <option value="苏教版">苏教版</option>
+                                <option value="河北版">河北版</option>
+                                <option value="外研版">外研版</option>
+                            </select>
+                            <select id="mathematicsTextbooks">
+                                <option value="统编版">统编版</option>
+                                <option value="人教版">人教版</option>
+                                <option value="浙教版">浙教版</option>
+                                <option value="北师大版">北师大版</option>
+                                <option value="苏教版">苏教版</option>
+                                <option value="河北版">河北版</option>
+                                <option value="外研版">外研版</option>
+                            </select>
+                            <select id="englishTextbooks">
+                                <option value="统编版">统编版</option>
+                                <option value="人教版">人教版</option>
+                                <option value="浙教版">浙教版</option>
+                                <option value="北师大版">北师大版</option>
+                                <option value="苏教版">苏教版</option>
+                                <option value="河北版">河北版</option>
+                                <option value="外研版">外研版</option>
+                            </select>
+                            <select id="physicsTextbooks">
+                                <option value="统编版">统编版</option>
+                                <option value="人教版">人教版</option>
+                                <option value="浙教版">浙教版</option>
+                                <option value="北师大版">北师大版</option>
+                                <option value="苏教版">苏教版</option>
+                                <option value="河北版">河北版</option>
+                                <option value="外研版">外研版</option>
+                            </select>
+                            <select id="chemistryTextbooks">
+                                <option value="统编版">统编版</option>
+                                <option value="人教版">人教版</option>
+                                <option value="浙教版">浙教版</option>
+                                <option value="北师大版">北师大版</option>
+                                <option value="苏教版">苏教版</option>
+                                <option value="河北版">河北版</option>
+                                <option value="外研版">外研版</option>
+                            </select>
+                            <select id="biologyTextbooks">
+                                <option value="统编版">统编版</option>
+                                <option value="人教版">人教版</option>
+                                <option value="浙教版">浙教版</option>
+                                <option value="北师大版">北师大版</option>
+                                <option value="苏教版">苏教版</option>
+                                <option value="河北版">河北版</option>
+                                <option value="外研版">外研版</option>
+                            </select>
+                            <select id="historyTextbooks">
+                                <option value="统编版">统编版</option>
+                                <option value="人教版">人教版</option>
+                                <option value="浙教版">浙教版</option>
+                                <option value="北师大版">北师大版</option>
+                                <option value="苏教版">苏教版</option>
+                                <option value="河北版">河北版</option>
+                                <option value="外研版">外研版</option>
+                            </select>
+                            <select id="geographyTextbooks">
+                                <option value="统编版">统编版</option>
+                                <option value="人教版">人教版</option>
+                                <option value="浙教版">浙教版</option>
+                                <option value="北师大版">北师大版</option>
+                                <option value="苏教版">苏教版</option>
+                                <option value="河北版">河北版</option>
+                                <option value="外研版">外研版</option>
+                            </select>
+                            <select id="morality_and_rule_of_lawTextbooks">
+                                <option value="统编版">统编版</option>
+                                <option value="人教版">人教版</option>
+                                <option value="浙教版">浙教版</option>
+                                <option value="北师大版">北师大版</option>
+                                <option value="苏教版">苏教版</option>
+                                <option value="河北版">河北版</option>
+                                <option value="外研版">外研版</option>
+                            </select>
+                        </div>
+                    </div>
+                    <a id="subjectInfoSubmit" class="submit-btn" href="#">提交</a>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+<script src="../script/navbar.js"></script>
+<script src="../script/user.js"></script>
+
+<script>
+    document.getElementById("userGrade").valueOf().value = "<%= userGrade %>";
+    document.getElementById("userVolume").valueOf().value = "<%= userVolume %>";
+    document.getElementById("chineseTextbooks").valueOf().value = "<%= chineseTextbooks %>";
+    document.getElementById("mathematicsTextbooks").valueOf().value = "<%= mathematicsTextbooks %>";
+    document.getElementById("englishTextbooks").valueOf().value = "<%= englishTextbooks %>";
+    document.getElementById("physicsTextbooks").valueOf().value = "<%= physicsTextbooks %>";
+    document.getElementById("chemistryTextbooks").valueOf().value = "<%= chemistryTextbooks %>";
+    document.getElementById("biologyTextbooks").valueOf().value = "<%= biologyTextbooks %>";
+    document.getElementById("historyTextbooks").valueOf().value = "<%= historyTextbooks %>";
+    document.getElementById("geographyTextbooks").valueOf().value = "<%= geographyTextbooks %>";
+    document.getElementById("morality_and_rule_of_lawTextbooks").valueOf().value = "<%= morality_and_rule_of_lawTextbooks %>";
+
+    const userInfoSubmit = document.getElementById('userInfoSubmit')
+    const subjectInfoSubmit = document.getElementById('subjectInfoSubmit')
+
+
+    userInfoSubmit.addEventListener('click', () => {
+        const userName = document.getElementById('userName').valueOf().value;
+        const userPortrait = document.getElementById('userPortrait');
+        const userAge = document.getElementById('userAge').valueOf().value;
+        const userBirthday = document.getElementById('userBirthday').valueOf().value;
+
+        const formData = new FormData();
+        formData.append('file', userPortrait.valueOf().files[0]);
+
+        if (userName === '' && userPortrait.valueOf().files.length === 0 && userAge === '' && userBirthday === '') {
+            alert('请填入至少一个信息')
+            return
+        }
+
+        if (userPortrait.valueOf().files.length > 0) {
+            fetch('/api/upLoadPortrait', {
+                method: "POST",
+                headers: {
+                    'Content': 'application/json',
+                },
+                body: formData
+            }).then(r => {
+                return r.json();
+            }).then(data => {
+                alert('头像' + data.message)
+                if (data.success && userName === '' && userAge === '') window.location.reload();
+            })
+        }
+
+        if (userName !== '' || userAge !== '' || userBirthday !== '') {
+            fetch('/api/upDateUserInfo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: userName,
+                    age: userAge,
+                    birthday: userBirthday
+                })
+            }).then(r => {
+                console.log(typeof userBirthday)
+                return r.json();
+            }).then(data => {
+                console.log(data);
+                alert('数据' + data.message);
+                if (data.success)
+                    window.location.reload();
+                else
+                    console.log(data.message);
+            })
+        }
+    })
+
+    subjectInfoSubmit.addEventListener('click', () => {
+        const userName = document.getElementById('userName').valueOf().value;
+        const userPortrait = document.getElementById('userPortrait');
+        const userAge = document.getElementById('userAge').valueOf().value;
+        const userBirthday = document.getElementById('userBirthday').valueOf().value;
+
+        const formData = new FormData();
+        formData.append('file', userPortrait.valueOf().files[0]);
+
+        if (userName === '' && userPortrait.valueOf().files.length === 0 && userAge === '' && userBirthday === '') {
+            alert('请填入至少一个信息')
+            return
+        }
+
+        if (userPortrait.valueOf().files.length > 0) {
+            fetch('/api/upLoadPortrait', {
+                method: "POST",
+                headers: {
+                    'Content': 'application/json',
+                },
+                body: formData
+            }).then(r => {
+                return r.json();
+            }).then(data => {
+                alert('头像' + data.message)
+                if (data.success && userName === '' && userAge === '') window.location.reload();
+            })
+        }
+
+        if (userName !== '' || userAge !== '' || userBirthday !== '') {
+            fetch('/api/upDateUserInfo', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: userName,
+                    age: userAge,
+                    birthday: userBirthday
+                })
+            }).then(r => {
+                console.log(typeof userBirthday)
+                return r.json();
+            }).then(data => {
+                console.log(data);
+                alert('数据' + data.message);
+                if (data.success)
+                    window.location.reload();
+                else
+                    console.log(data.message);
+            })
+        }
+    })
+</script>
+</body>
+
+</html>

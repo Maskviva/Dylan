@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible"/>
+
+    <link href="../../../style.css" id="my-style-sheet" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <link href="../../../favicon.ico" rel="shortcut icon">
+    <title>QuestiAI</title>
+
+    <style>
+        .main-box {
+            display: flex;
+            flex-direction: column;
+            align-self: center;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 700px;
+            min-width: 340px;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: all 0.3s ease-in-out;
+        }
+
+        @media screen and (max-width: 932px) {
+            .main-box {
+                width: 80%;
+            }
+        }
+
+        #answer {
+            width: calc(100% - 24px);
+            height: 100px;
+            resize: none;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        #answer:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2);
+        }
+
+        .main-box .header-button,
+        .card .header-button {
+            color: white;
+            background-color: #459efd;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .main-box .header-button:hover,
+        .card .header-button:hover {
+            background-color: #2a7ae8;
+        }
+
+        hr {
+            width: 100%;
+        }
+
+        .title {
+            margin: 20px auto;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        #appraise {
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(2px);
+            position: absolute;
+            left: 0;
+            top: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+        }
+
+        .card {
+            width: 400px;
+            min-height: 220px;
+            padding: 0 10px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: onload 0.75s;
+        }
+
+        #loading-box {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            border: 7px solid #3498db;
+            clip: rect(0, 75px, 75px, 0);
+            border-right-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .error-toast {
+            position: fixed;
+            bottom: 20px;
+            background: #ff4444;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+        @keyframes onload {
+            0% {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <div class="header-box">
+        <button aria-label="Toggle Menu" class="header-button" onclick="toggleMenu()" type="button"><i
+                    class="fas fa-bars"></i></button>
+        <h2>你好，欢迎来到QuestiAI</h2>
+    </div>
+    <div class="user-box" style="z-index: 999;">
+        <% if (userExist) { %>
+            <div class="btn-box" id="user-box">
+                <img alt="用户头像" width="22px" height="22px" class="user-portrait" src="<%= userPortrait %>"
+                     style="border-radius: 4px;">
+                <a href="#" class="user-name"><%= userName %></a>
+            </div>
+            <div id="user-info">
+                <div class="user-info-box-1">
+                    <a href="#"></a>
+                </div>
+                <div class="user-info-box-2">
+                    <div class="user-info-box-2-child1">
+                        <a class="user-info-box-2-child1-img user-portrait"
+                           style="background-image: url('<%= userPortrait %>')" href="#">
+                            <p>编辑头像</p>
+                        </a>
+                        <p class="user-name"><%= userName %></p>
+                    </div>
+                    <div class="user-info-box-2-child2">
+                        <a href="/setting" class="user-info-box-btn" id="user-setting">设置</a>
+                        <a id="logout" href="#" class="user-info-box-btn">退出登录</a>
+                    </div>
+                </div>
+                <div class="user-info-box-3">
+                </div>
+            </div>
+        <% } else { %>
+            <div class="sign-box" id="sign-box">
+                <a href="/login" id="login">登录</a>
+                <a href="/register" id="register">注册</a>
+            </div>
+        <% } %>
+        <button aria-label="Reminder" class="header-button" onclick="" style="width: 44px; height: 44px"
+                type="button"><a href="#" id="bell"></a>
+        </button>
+    </div>
+</header>
+
+<main id="main">
+    <nav class="main-nav" id="main-nav">
+        <ul class="main-nav-list">
+            <li class="main-nav-item" id="main-nav-title-box">
+                <a id="main-nav-title">QuestiAI</a>
+            </li>
+            <li class="main-nav-item">
+                <a class="main-nav-link" href="/" id="home">首页</a>
+            </li>
+            <li class="main-nav-item" id="parent-item">
+                <a class="main-nav-link" id="introduction">介绍<i class="fas fa-angle-down" id="arrow"></i></a>
+                <ul class="submenu">
+                    <li><a href="#">关于我们</a></li>
+                </ul>
+            </li>
+            <li class="main-nav-item">
+                <a class="main-nav-link" href="/feedback" id="feedback">反馈</a>
+            </li>
+            <% if (userExist) { %>
+                <hr class="main-nav-hr">
+                <li class="main-nav-item">
+                    <a class="main-nav-link" href="/mine" id="mine">我的</a>
+                </li>
+                <li class="main-nav-item">
+                    <a class="main-nav-link" href="/setting" id="setting">设置</a>
+                </li>
+            <% } else { %>
+
+            <% } %>
+        </ul>
+    </nav>
+
+    <div class="content">
+        <section class="section">
+            <div class="main-box">
+                <h1 class="title">古诗默写</h1>
+                <hr>
+                <div style="display: flex; align-items: center; justify-content: center;">
+                    <p id="question">出题中...</p>
+                </div>
+                <hr>
+                <label>
+                    <textarea id="answer" placeholder="请在此输入答案"></textarea>
+                </label>
+                <button class="header-button" id="submit-button">提交</button>
+
+            </div>
+
+        </section>
+    </div>
+</main>
+
+<div id="appraise">
+    <div id="loading-box"></div>
+    <div class="card" id="comment-box">
+        <h2>评价</h2>
+        <p id="appraise-score"> 得分: </p>
+        <hr>
+        <p id="appraise-comment"></p>
+        <hr>
+        <a class="header-button" style="text-decoration: none;" href="/learn/chinese/PoetryDictation">确定</a>
+    </div>
+</div>
+<script src="../../../script/navbar.js"></script>
+<% if (userExist) { %>
+    <script src="../../../script/user.js"></script>
+<% } else { %>
+
+<% } %>
+<script>
+    const question = document.getElementById('question');
+    const answer = document.getElementById('answer');
+    const submitButton = document.getElementById('submit-button');
+    const appraise = document.getElementById('appraise');
+    const appraiseScore = document.getElementById('appraise-score');
+    const commentBox  = document.getElementById('comment-box');
+    const appraiseComment = document.getElementById('appraise-comment');
+    const loadingBox = document.getElementById('loading-box');
+
+    async function apiRequest(url, body) {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        })
+        return response.json();
+    }
+
+    apiRequest('/api/getQuestion/chinese/PoetryDictation').then(r => {
+        if (r.success) {
+            question.innerText = r.data["question"];
+        }
+    })
+
+    submitButton.addEventListener('click', () => {
+        if (answer.value === '') {
+            alert('答案不能为空！')
+        } else {
+            appraise.style.display = 'flex';
+            apiRequest('/api/getAnswer', {
+                question: question.innerText,
+                answer: answer.value
+            }).then(r => {
+                if (r.success) {
+                    loadingBox.style.display = 'none';
+                    commentBox.style.display = 'flex';
+                    appraiseScore.innerText = '得分: ' + r.data.score;
+                    appraiseComment.innerText = r.data.message;
+                } else {
+                    alert('提交失败！');
+                }
+            })
+        }
+    })
+</script>
+</body>
+
+</html>

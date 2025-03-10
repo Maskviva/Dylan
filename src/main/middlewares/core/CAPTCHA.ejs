@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Optimized Puzzle Captcha</title>
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --glass: rgba(255, 255, 255, 0.1);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            touch-action: pan-y;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #f0f2f5;
+        }
+
+        .captcha-container {
+            width: 640px;
+            border-radius: 13px;
+            background: white;
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .image-wrapper {
+            width: 100%;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 13px;
+        }
+
+        #bg-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 13px;
+        }
+
+        #puzzle-slot,
+        .puzzle-piece {
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            border-radius: 13px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #puzzle-slot {
+            box-shadow: var(--shadow);
+        }
+
+        .puzzle-piece {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .slider-track {
+            width: 100%;
+            height: 5px;
+            background: rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .slider-thumb {
+            width: 40px;
+            height: 40px;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            box-shadow: var(--shadow);
+            cursor: grab;
+            transition: 0.3s;
+        }
+
+        .slider-thumb:active {
+            cursor: grabbing;
+        }
+
+        @media screen  and (max-width: 680px) {
+            .captcha-container {
+                width: 90%;
+            }
+
+            .image-wrapper {
+                height: calc(90vw * 4 / 6);
+            }
+
+            #puzzle-slot,
+            .puzzle-piece {
+                width: calc(90vw * 4 / 6 / 4);
+                height: calc(90vw * 4 / 6 / 4);
+            }
+        }
+    </style>
+</head>
+<body>
+<h1>请拖动滑块完成验证</h1>
+<div class="captcha-container">
+    <div class="image-wrapper">
+        <img alt="captcha" crossorigin="anonymous" src="<%= img %>" id="bg-image">
+        <div class="puzzle-piece"></div>
+        <canvas id="puzzle-slot"></canvas>
+    </div>
+    <div class="slider-track">
+        <div class="slider-thumb"></div>
+    </div>
+</div>
+
+<script>
+    const image = document.getElementById('bg-image');
+    const puzzle_slot = document.getElementById("puzzle-slot");
+    const puzzleCtx = puzzle_slot.getContext('2d');
+    const puzzle_piece = document.getElementsByClassName("puzzle-piece")[0];
+    const slider_track = document.getElementsByClassName("slider-track")[0];
+    const slider_thumb = document.getElementsByClassName("slider-thumb")[0];
+
+    const random = Math.floor(Math.random() * 101) / 100;
+    const n = image.offsetHeight / 4;
+
+    let mousePath = [];
+    let onClick = false;
+
+    // 初始化拼图位置
+    window.addEventListener("load", () => {
+        const maxX = image.width - n;
+        const maxY = image.height - n;
+        const posX = maxX * random;
+        const posY = maxY * random;
+
+        puzzle_piece.style.left = `${posX}px`;
+        puzzle_piece.style.top = `${posY}px`;
+        puzzle_slot.style.top = `${posY}px`;
+    });
+
+    // 图像处理
+    image.onload = () => {
+        // 临时调整画布尺寸为原图大小
+        const originalWidth = image.width;
+        const originalHeight = image.height;
+        puzzle_slot.width = originalWidth;
+        puzzle_slot.height = originalHeight;
+
+        // 绘制完整图像
+        puzzleCtx.drawImage(image, 0, 0, originalWidth, originalHeight);
+
+        // 计算截取位置
+        const maxX = originalWidth - n;
+        const maxY = originalHeight - n;
+        const posX = maxX * random;
+        const posY = maxY * random;
+
+        // 获取截取区域
+        const imageData = puzzleCtx.getImageData(posX, posY, n, n);
+
+        // 重置画布为显示尺寸
+        puzzle_slot.width = n;
+        puzzle_slot.height = n;
+        puzzleCtx.putImageData(imageData, 0, 0);
+
+        // 优化渲染质量
+        puzzleCtx.imageSmoothingEnabled = true;
+        puzzleCtx.imageSmoothingQuality = 'high';
+    };
+
+    function unSuccess() {
+        navigator.vibrate(200);
+        setTimeout(() => {
+            slider_thumb.style.transition = "0.3s";
+            puzzle_slot.style.transition = "0.3s";
+            puzzle_slot.style.left = "0";
+            slider_thumb.style.left = "-20px";
+
+        }, 500);
+    }
+
+    function onDown(e) {
+        if (e.target === slider_thumb) {
+            onClick = true;
+            slider_thumb.style.transition = "none";
+            puzzle_slot.style.transition = "none";
+        }
+    }
+
+    function onUp() {
+        onClick = false;
+        if (Math.abs(puzzle_slot.offsetLeft - puzzle_piece.offsetLeft) < 8 && mousePath.length > 200)  {
+            fetch('/api/verify-captcha', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    mousePath: mousePath,
+                    puzzle_slot_left: puzzle_slot.offsetLeft,
+                    puzzle_piece_left: puzzle_piece.offsetLeft
+                })
+            }).then((r) => {
+                console.log(mousePath)
+                return r.json();
+            }).then((data) => {
+                if (data.success)
+                    window.location.href = '/';
+                else
+                    unSuccess();
+            })
+        } else unSuccess();
+    }
+
+    function onMove(e) {
+        mousePath.push(e.clientX);
+        const moveLeft = e.clientX - slider_track.offsetLeft;
+        if (onClick && moveLeft >= 0 && moveLeft <= slider_track.offsetWidth) {
+            slider_thumb.style.left = moveLeft - 20 + "px";
+            puzzle_slot.style.left = moveLeft - (moveLeft / slider_track.offsetWidth) * n + 'px';
+        }
+    }
+
+    window.addEventListener("mousedown", (e) => onDown(e));
+    window.addEventListener("touchstart", (e) => onDown(e.touches[0]));
+    window.addEventListener("mouseup", () => onUp());
+    window.addEventListener("touchend", () => onUp());
+    window.addEventListener("touchcancel", () => onUp());
+    window.addEventListener("mousemove", (e) => onMove(e));
+    window.addEventListener("touchmove", (e) => {
+        e.preventDefault();
+        onMove(e.touches[0]);
+    });
+</script>
+</body>
+</html>

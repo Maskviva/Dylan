@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible"/>
+
+    <link href="../style.css" id="my-style-sheet" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <link href="../favicon.ico" rel="shortcut icon">
+    <title>狄思可(Dylan)</title>
+
+    <style>
+        .main {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 0.5fr 1.5fr;
+            grid-template-rows: 1fr;
+            background-color: white;
+            border-radius: 8px;
+            border: 2px solid #e4f0ff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 700px;
+            box-sizing: border-box;
+            transition: all 0.3s ease-in-out;
+        }
+
+        @media screen and (max-width: 932px) {
+            .main-container {
+                width: 80%;
+                min-width: 340px;
+            }
+        }
+
+        .container-group-title {
+            background-color: #e4f0ff;
+            border-radius: 8px 0 0 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-right: black solid 1px;
+        }
+
+        .container-group-container {
+            margin-left: 10px;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        @media screen and (max-width: 932px) {
+            .container-group-container {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <div class="header-box">
+        <button aria-label="Toggle Menu" class="header-button" onclick="toggleMenu()" type="button"><i
+                    class="fas fa-bars"></i></button>
+        <h2>你好，欢迎来到 Dylan </h2>
+    </div>
+    <div class="user-box" style="z-index: 999;">
+        <% if (userExist) { %>
+            <div class="btn-box" id="user-box">
+                <img alt="用户头像" width="22px" height="22px" class="user-portrait" src="<%= userPortrait %>"
+                     style="border-radius: 4px;">
+                <a href="#" class="user-name"><%= userName %></a>
+            </div>
+            <div id="user-info">
+                <div class="user-info-box-1">
+                    <a href="#"></a>
+                </div>
+                <div class="user-info-box-2">
+                    <div class="user-info-box-2-child1">
+                        <a class="user-info-box-2-child1-img user-portrait"
+                           style="background-image: url('<%= userPortrait %>')" href="#">
+                            <p>编辑头像</p>
+                        </a>
+                        <p class="user-name"><%= userName %></p>
+                    </div>
+                    <div class="user-info-box-2-child2">
+                        <a href="/setting" class="user-info-box-btn" id="user-setting">设置</a>
+                        <a id="logout" href="#" class="user-info-box-btn">退出登录</a>
+                    </div>
+                </div>
+                <div class="user-info-box-3">
+                </div>
+            </div>
+        <% } else { %>
+            <div class="sign-box" id="sign-box">
+                <a href="/login" id="login">登录</a>
+                <a href="/register" id="register">注册</a>
+            </div>
+        <% } %>
+        <button aria-label="Reminder" class="header-button" onclick="" style="width: 44px; height: 44px"
+                type="button"><a href="#" id="bell"></a>
+        </button>
+    </div>
+</header>
+
+<main id="main">
+    <nav class="main-nav" id="main-nav">
+        <ul class="main-nav-list">
+            <li class="main-nav-item" id="main-nav-title-box">
+                <a id="main-nav-title">Dylan</a>
+            </li>
+            <li class="main-nav-item">
+                <a class="main-nav-link" href="/" id="home">首页</a>
+            </li>
+            <li class="main-nav-item" id="parent-item">
+                <a class="main-nav-link" id="introduction">介绍<i class="fas fa-angle-down" id="arrow"></i></a>
+                <ul class="submenu">
+                    <li><a href="#">关于我们</a></li>
+                </ul>
+            </li>
+            <li class="main-nav-item">
+                <a class="main-nav-link" href="/feedback" id="feedback">反馈</a>
+            </li>
+            <% if (userExist) { %>
+                <hr class="main-nav-hr">
+                <li class="main-nav-item">
+                    <a class="main-nav-link" href="#" id="mine">我的</a>
+                </li>
+                <li class="main-nav-item">
+                    <a class="main-nav-link" href="/setting" id="setting">设置</a>
+                </li>
+            <% } else { %>
+
+            <% } %>
+        </ul>
+    </nav>
+
+    <div class="content">
+        <section class="section">
+            <div class="main">
+                <h1>我的信息:</h1>
+                <div style="padding: 20px;" class="main-container">
+                    <a class="user-info-box-2-child1-img user-portrait"
+                       style="margin: 0 40px 0 0; width: 200px; height: 200px; background-image: url('<%= userPortrait %>')"
+                       href="#">
+                        <p>编辑头像</p>
+                    </a>
+                </div>
+                <div class="main-container">
+                    <div class="container-group-title">
+                        <p>用户名:</p>
+                        <p>邮箱:</p>
+                        <p>年龄:</p>
+                        <p>出生日期:</p>
+                    </div>
+                    <div class="container-group-container">
+                        <p><%= userName %></p>
+                        <p><%= userEmail %></p>
+                        <p><%= userAge %></p>
+                        <p><%= userBirthday %></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+<script src="../script/navbar.js"></script>
+<% if (userExist) { %>
+    <script src="../script/user.js"></script>
+<% } else { %>
+
+<% } %>
+<script>
+</script>
+</body>
+
+</html>

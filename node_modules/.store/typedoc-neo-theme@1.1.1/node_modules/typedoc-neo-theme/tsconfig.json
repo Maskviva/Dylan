@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+      "moduleResolution": "node",
+      "allowJs": true,
+      "module": "umd",
+      "target": "es2015",
+      "outDir": "./",
+      "experimentalDecorators": true
+    },
+    "files": [
+      "plugin.ts",
+      "third_party/src/default/helpers/json.ts",
+      "third_party/src/default/helpers/remove-quotes.ts"
+    ],
+    "exclude": [
+      "node_modules"
+    ]
+}

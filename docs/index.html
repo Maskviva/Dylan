@@ -1,0 +1,78 @@
+<!DOCTYPE html><html class="default" lang="en" data-base="."><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>dylan---rebuild.1</title><meta name="description" content="Documentation for dylan---rebuild.1"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script defer src="assets/main.js"></script><script async src="assets/icons.js" id="tsd-icons-script"></script><script async src="assets/search.js" id="tsd-search-script"></script><script async src="assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><div class="table-cell" id="tsd-search"><div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div><div class="field"><div id="tsd-toolbar-links"></div></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">dylan---rebuild.1</a></div><div class="table-cell" id="tsd-widgets"><a href="#" class="tsd-widget tsd-toolbar-icon menu no-caption" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-menu"></use></svg></a></div></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><h1>dylan---rebuild.1</h1></div><div class="tsd-panel tsd-typography"><a id="dylan" class="tsd-anchor"></a><h1 class="tsd-anchor-link">Dylan<a href="#dylan" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1><a id="运行环境要求" class="tsd-anchor"></a><h2 class="tsd-anchor-link">运行环境要求<a href="#运行环境要求" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ol>
+<li>系统要求：windows 10+(推荐win11 其他系统如mac、linux等理论上也可运行 但由于运行文件(<code>*.bat</code>)只有windows系统可运行)</li>
+<li>Node.js 运行环境
+Node.js 版本：建议使用 Node.js 14.x 及以上（兼容 LTS 版本）<br>
+包管理工具：npm、yarn 或 pnpm（推荐使用最新版本）
+需要全局安装 <a href="https://www.runoob.com/typescript/ts-tutorial.html"><code>typescript</code></a> 和 <a href="https://www.npmjs.com/package/ts-node">
+<code>ts-node</code></a> 安装命令如下 <strong><em><code>npm install -g ts-node typescript</code></em></strong></li>
+<li>MySQL 数据库
+MySQL 服务：
+本地 MySQL 服务器（5.7+）
+确保服务已启动且网络可访问<br>
+数据库权限：
+用户需拥有目标数据库的所有权限 且<br>
+用户名需设置为 <strong><code>root</code></strong> 密码为 <code>1132</code> mysql的端口也得是<code>3306</code>(具体原因看
+<code>项目主文件夹 -&gt; src -&gt; config -&gt; db -&gt; pool.json</code>)</li>
+<li>运行方法：直接打开项目主文件夹下的 <code>启动.bat</code> 文件会自动打开浏览器进入对应的网页 运行时bat文件生成的运行窗口不能关闭(
+关闭就代表终止程序)</li>
+</ol>
+<a id="介绍" class="tsd-anchor"></a><h2 class="tsd-anchor-link">介绍<a href="#介绍" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>这是一个基于TypeScript、nodejs、Express和deepseek-v3的应用 <br>
+前端的技术栈是 h5 + css + js 和 jquery库<br>
+后端是 express + typescript + nodejs<br>
+它使用的是：后端服务托管前端资源的混合架构<br>
+deepseek-v3的接口来自 <a href="https://siliconflow.cn/zh-cn/">硅基流动</a> 由于token有限
+有所以使用多了就不能用了需要购买<a href="https://siliconflow.cn/zh-cn/pricing">token</a></p>
+<a id="项目结构" class="tsd-anchor"></a><h4 class="tsd-anchor-link">项目结构:<a href="#项目结构" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h4><ul>
+<li>项目主文件夹</li>
+<li>├── main.ts # 入口文件</li>
+<li>└── src</li>
+<li>├── main # 程序主文件夹</li>
+<li>│ ├── app.ts # 程序主文件</li>
+<li>│ ├── config # 配置模块</li>
+<li>│ │ └── index.ts # 项目配置文件读取模块</li>
+<li>│ ├── core # 核心模块</li>
+<li>│ │ └── DataBase # 数据库模块</li>
+<li>│ │   ├── learn.repository.ts # 学习数据库数据库操作模块</li>
+<li>│ │   └── user.repository.ts  # 用户数据库操作模块</li>
+<li>│ ├── middlewares # 中间件模块</li>
+<li>│ │ ├── core # 核心中间件模块</li>
+<li>│ │ │ ├── CAPTCHA.ts # 人机验证中间件</li>
+<li>│ │ │ └── onlineUser.ts # 用户在线状态中间件</li>
+<li>│ │ └── Routes # 路由中间件模块</li>
+<li>│ │   └── upLoadPortrait.ts # 上传头像路由中间件</li>
+<li>│ ├── route # 路由模块</li>
+<li>│ │ ├── api.route.ts # api路由模块</li>
+<li>│ │ ├── views.route.ts # 视图路由模块</li>
+<li>│ │ └── index.ts # 路由入口文件</li>
+<li>│ ├── service # 服务模块</li>
+<li>│ │ ├── DataBase # 数据库服务模块</li>
+<li>│ │ │ ├── learn.service.ts # 学习数据库服务模块</li>
+<li>│ │ │ └── user.service.ts # 用户数据库服务模块</li>
+<li>│ │ ├── Routes # 路由服务模块</li>
+<li>│ │ │ ├── route.ai.service.ts # ai路由服务模块</li>
+<li>│ │ │ ├── route.auto.service.ts # 认证路由服务模块</li>
+<li>│ │ │ ├── route.updata.service.ts # 数据更新路由服务模块</li>
+<li>│ │ │ └── route.user.service.ts # 用户路由服务模块</li>
+<li>│ │ ├── WebSocket # WebSocket服务模块</li>
+<li>│ │ │ └── websocket.chatroom.service.ts # 聊天室WebSocket服务模块</li>
+<li>│ │ └── user.service.ts # 用户服务模块</li>
+<li>│ └── utils # 工具模块</li>
+<li>│   ├── config # 配置工具模块</li>
+<li>│   │ └── index.ts # 项目配置工具模块入口文件</li>
+<li>│   ├── DataBase # 数据库工具模块</li>
+<li>│   │ └── index.ts # 数据库工具模块入口文件</li>
+<li>│   ├── Email # 邮件工具模块</li>
+<li>│   │ └── index.ts # 邮件工具模块入口文件</li>
+<li>│   ├── Route # 文件工具模块</li>
+<li>│   │ ├── AI # AI文件工具模块</li>
+<li>│   │ │ └── index.ts # AI文件工具模块入口文件</li>
+<li>│   │ └── verifyCaptcha.ts # 人机验证数据分析工具模块</li>
+<li>│   └── Views # 视图文件工具模块</li>
+<li>│       └── index.ts # 视图文件工具模块入口文件</li>
+<li>├── resources # 资源文件夹</li>
+<li>│ ├── application.yml # 项目配置文件</li>
+<li>│ ├── public # 静态资源文件夹</li>
+<li>│ └── views # 视图文件夹</li>
+<li>└── types # 类型文件夹</li>
+</ul>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-chevronDown"></use></svg>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-chevronDown"></use></svg>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#dylan"><span>Dylan</span></a><ul><li><a href="#运行环境要求"><span>运行环境要求</span></a></li><li><a href="#介绍"><span>介绍</span></a></li><li><ul><li><a href="#项目结构"><span>项目结构:</span></a></li></ul></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="modules.html">dylan---rebuild.1</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>

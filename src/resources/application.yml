@@ -1,0 +1,33 @@
+DataBase:
+  pool:
+    host: "localhost"
+    port: 3306
+    user: "root"
+    password: "1132"
+    database: "test1"
+    waitForConnections: true
+    connectionLimit: 10
+
+email:
+  server:
+    host: "smtp.163.com"
+    port: 465
+    secure: true
+    auth:
+      user: "redstone_xiaotong@163.com"
+      pass: "VVZvLC7NhhPCQnAU"
+  options:
+    from: "\"狄思可(Dylan)\" redstone_xiaotong@163.com"
+    subject: "狄思可(Dylan)"
+    text: "这是你的验证码"
+
+Routes:
+  AI:
+    apiKey: "sk-mbwfcojvbxaeykavfasizmenfatgjnwhnszfvxuvwflnflis"
+    question:
+      chinese:
+        PoetryDictation: "现在你作为提问者 给我出一道 {0} 语文人教版的古诗默写题 题目长度100个字左右 用{ question: 内容 }的json形式发给我 注意: 这是默写题 请不要给出答案"
+
+WebSocket:
+  ChatRoom:
+    port: 8080

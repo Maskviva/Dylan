@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>简单3D跑酷游戏</title>
+    <style>
+        * { margin: 0; padding: 0 }
+        #score {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: white;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+<div id="score">得分: 0</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script>
+    let score = 0;
+    let gameActive = true;
+    const obstacles = [];
+
+    // 初始化场景
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // 创建玩家（红色立方体）
+    const playerGeometry = new THREE.BoxGeometry(1, 1, 1);
+    const playerMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 });
+    const player = new THREE.Mesh(playerGeometry, playerMaterial);
+    player.position.y = 0.5;
+    scene.add(player);
+
+    // 添加光照
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(5, 5, 5);
+    scene.add(directionalLight);
+
+    // 创建地面
+    const groundGeometry = new THREE.PlaneGeometry(20, 100);
+    const groundMaterial = new THREE.MeshPhongMaterial({
+        color: 0x888888,
+        side: THREE.DoubleSide
+    });
+    const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+    ground.rotation.x = Math.PI / 2;
+    scene.add(ground);
+
+    // 设置相机位置
+    camera.position.set(0, 5, 10);
+    camera.lookAt(0, 0, 0);
+
+    // 游戏控制
+    document.addEventListener('keydown', (e) => {
+        if (!gameActive) return;
+
+        switch(e.key.toLowerCase()) {
+            case 'a': // 左移
+                player.position.x = Math.max(-8, player.position.x - 1.5);
+                break;
+            case 'd': // 右移
+                player.position.x = Math.min(8, player.position.x + 1.5);
+                break;
+        }
+    });
+
+    // 生成障碍物
+    function createObstacle() {
+        const geometry = new THREE.BoxGeometry(2, 1, 1);
+        const material = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
+        const obstacle = new THREE.Mesh(geometry, material);
+
+        obstacle.position.set(
+            (Math.random() - 0.5) * 16, // X位置随机
+            0.5,
+            -50 // 初始位置在远端
+        );
+
+        scene.add(obstacle);
+        obstacles.push(obstacle);
+    }
+
+    // 碰撞检测
+    function checkCollision() {
+        const playerBox = new THREE.Box3().setFromObject(player);
+
+        for (let i = obstacles.length - 1; i >= 0; i--) {
+            const obstacleBox = new THREE.Box3().setFromObject(obstacles[i]);
+            if (playerBox.intersectsBox(obstacleBox)) {
+                gameOver();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // 游戏结束
+    function gameOver() {
+        gameActive = false;
+        document.body.style.backgroundColor = "#ff0000";
+        document.getElementById('score').innerHTML += " - 游戏结束!";
+    }
+
+    // 游戏循环
+    function animate() {
+        if (!gameActive) return;
+
+        // 生成障碍物
+        if (Math.random() < 0.03) {
+            createObstacle();
+        }
+
+        // 移动障碍物
+        obstacles.forEach(obstacle => {
+            obstacle.position.z += 0.3;
+            if (obstacle.position.z > 10) {
+                scene.remove(obstacle);
+                obstacles.splice(obstacles.indexOf(obstacle), 1);
+                score++;
+                document.getElementById('score').innerHTML = `得分: ${score}`;
+            }
+        });
+
+        // 碰撞检测
+        if (!checkCollision()) {
+            requestAnimationFrame(animate);
+        }
+
+        renderer.render(scene, camera);
+    }
+
+    // 启动游戏
+    animate();
+
+    // 窗口自适应
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+</script>
+</body>
+</html>

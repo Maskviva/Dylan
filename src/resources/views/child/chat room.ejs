@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible"/>
+
+    <link href="/style.css" id="my-style-sheet" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <link href="/favicon.ico" rel="shortcut icon">
+    <title>狄思可(Dylan)</title>
+
+    <style>
+        .main {
+            width: 100%;
+            height: calc(100% - 40px);
+            padding: 10px;
+            display: flex;
+            gap: 20px;
+            flex-direction: column;
+        }
+
+        #answer {
+            margin-left: 15px;
+            width: calc(100% - 50px);
+            height: 20px;
+            resize: none;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-y: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #answer:focus {
+            outline: none;
+            border-color: #4299e1;
+            box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2);
+            transform: translateY(-6px);
+        }
+
+        .main-box {
+            height: 100%;
+            overflow-y: auto;
+            margin: 0;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .main-box::-webkit-scrollbar {
+            display: none;
+        }
+
+        .submit-box {
+            background: rgba(255, 253, 253, 0.5);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            height: 120px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .submit-button-box {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #submit-button {
+            width: 40px;
+            height: 40px;
+            background-color: white;
+            border: none;
+            border-radius: 100%;
+        }
+
+
+        .chat-box {
+            width: 100%;
+            display: grid;
+            grid-template-columns: auto 1fr;
+        }
+
+        .chat-time {
+            margin: 0;
+            padding: 0;
+            font-size: 12px;
+            color: #999;
+            text-align: center;
+        }
+
+        .chat-info {
+            margin: 0 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .chat-portrait {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+
+        .chat-message {
+            background-color: white;
+            margin: 0;
+            padding: 10px 5px;
+            border-radius: 0 8px 8px 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .self-message {
+            grid-template-columns: 1fr auto; justify-content: flex-end;
+        }
+
+        .self-info {
+            align-items: flex-end;
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <div class="header-box">
+        <button aria-label="Toggle Menu" class="header-button" onclick="toggleMenu()" type="button"><i
+                    class="fas fa-bars"></i></button>
+        <h2>你好，欢迎来到 Dylan </h2>
+    </div>
+    <div class="user-box" style="z-index: 999;">
+        <% if (userExist) { %>
+            <div class="btn-box" id="user-box">
+                <img alt="用户头像" width="22px" height="22px" class="user-portrait" src="<%= userPortrait %>"
+                     style="border-radius: 4px;">
+                <a href="#" class="user-name"><%= userName %></a>
+            </div>
+            <div id="user-info">
+                <div class="user-info-box-1">
+                    <a href="#"></a>
+                </div>
+                <div class="user-info-box-2">
+                    <div class="user-info-box-2-child1">
+                        <a class="user-info-box-2-child1-img user-portrait"
+                           style="background-image: url('<%= userPortrait %>')" href="#">
+                            <p>编辑头像</p>
+                        </a>
+                        <p class="user-name"><%= userName %></p>
+                    </div>
+                    <div class="user-info-box-2-child2">
+                        <a href="/setting" class="user-info-box-btn" id="user-setting">设置</a>
+                        <a id="logout" href="#" class="user-info-box-btn">退出登录</a>
+                    </div>
+                </div>
+                <div class="user-info-box-3">
+                </div>
+            </div>
+        <% } else { %>
+            <div class="sign-box" id="sign-box">
+                <a href="/login" id="login">登录</a>
+                <a href="/register" id="register">注册</a>
+            </div>
+        <% } %>
+        <button aria-label="Reminder" class="header-button" onclick="" style="width: 44px; height: 44px"
+                type="button"><a href="#" id="bell"></a>
+        </button>
+    </div>
+</header>
+
+<main id="main">
+    <nav class="main-nav" id="main-nav">
+        <ul class="main-nav-list">
+            <li class="main-nav-item" id="main-nav-title-box">
+                <a id="main-nav-title">Dylan</a>
+            </li>
+            <li class="main-nav-item">
+                <a class="main-nav-link" href="/" id="home">首页</a>
+            </li>
+            <li class="main-nav-item" id="parent-item">
+                <a class="main-nav-link" id="introduction">介绍<i class="fas fa-angle-down" id="arrow"></i></a>
+                <ul class="submenu">
+                    <li><a href="#">关于我们</a></li>
+                </ul>
+            </li>
+            <li class="main-nav-item" id="chat-room">
+                <a class="main-nav-link" href="#" id="chat_room">聊天室</a>
+            </li>
+            <li class="main-nav-item">
+                <a class="main-nav-link" href="/feedback" id="feedback">反馈</a>
+            </li>
+            <% if (userExist) { %>
+                <hr class="main-nav-hr">
+                <li class="main-nav-item">
+                    <a class="main-nav-link" href="/mine" id="mine">我的</a>
+                </li>
+                <li class="main-nav-item">
+                    <a class="main-nav-link" href="/setting" id="setting">设置</a>
+                </li>
+            <% } else { %>
+
+            <% } %>
+        </ul>
+    </nav>
+
+    <div class="content">
+        <section class="section">
+            <div class="main">
+                <div id="main-box" class="main-box">
+
+                </div>
+                <div class="submit-box">
+                    <textarea id="answer" placeholder="请在此输入答案"></textarea>
+                    <label class="submit-button-box" for="answer">
+                        <button id="submit-button">发送</button>
+                    </label>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+<script src="/script/navbar.js"></script>
+<% if (userExist) { %>
+    <script src="/script/user.js"></script>
+<% } else { %>
+
+<% } %>
+<script>
+    const url = window.location.host.slice(0, -5);
+    const submitBtn = document.getElementById('submit-button');
+    const answerInput = document.getElementById('answer');
+    const mainBox = document.getElementById('main-box');
+    const userPortrait = document.querySelectorAll('a.user-info-box-2-child1-img.user-portrait')[0].style.backgroundImage.slice(5);
+    const userName = '<%= userName %>';
+    const ws = new WebSocket(`ws://${url}:8080`);
+
+    // 发送消息
+    submitBtn.addEventListener('click', () => {
+        if (!answerInput.value.trim()) {
+            alert('请输入内容');
+            return;
+        }
+        const date = new Date();
+        ws.send(JSON.stringify({
+            time: date.toLocaleString(),
+            portrait: userPortrait,
+            name: userName,
+            message: answerInput.value
+        }));
+        answerInput.value = '';
+    });
+
+    // WebSocket连接事件
+    ws.onopen = () => console.log('已连接到服务器');
+    ws.onclose = () => console.log('连接已关闭');
+
+    let prevTime = null;
+
+    // 接收消息
+    ws.onmessage = (event) => {
+        const msg = JSON.parse(event.data);
+        const timeStr = msg.time.toLocaleString();
+        let timeHtml = '';
+
+        // 判断是否需要显示时间
+        if (prevTime !== timeStr.slice(11, 16)) {
+            timeHtml = `<p class="chat-time">${timeStr}</p>`;
+            prevTime = timeStr.slice(11, 16);
+        }
+
+        // 根据消息来源生成不同样式
+        const isSelf = msg.name === userName;
+        const html = `
+            ${timeHtml}
+            <div class="chat-box ${isSelf ? 'self-message' : ''}">
+                ${isSelf ? '' : `<img class="chat-portrait" src="${msg.portrait}" alt="用户头像">`}
+                <div class="chat-info ${isSelf ? 'self-info' : ''}">
+                    <p class="chat-name">${msg.name}</p>
+                    <p class="chat-message">${msg.message}</p>
+                </div>
+                ${isSelf ? `<img class="chat-portrait" src="${msg.portrait}" alt="用户头像">` : ''}
+            </div>
+        `;
+
+        mainBox.insertAdjacentHTML('beforeend', html);
+        mainBox.scrollTop = mainBox.scrollHeight;
+    };
+</script>
+</body>
+
+</html>
